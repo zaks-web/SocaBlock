@@ -12,13 +12,14 @@ Application Flask + SQLite pour tester :
 - tableau de bord avec le nombre de blocs et le temps écoulé depuis le premier bloc ;
 - profil avec affichage facultatif de sa propre clé privée, masquée par défaut ;
 - affichage compact des blocs, avec les détails accessibles à la demande ;
+- interface adaptée automatiquement au thème clair ou sombre de l'appareil ;
 - génération de blocs avec preuve de travail et difficulté réglable ;
 - profil et compteurs de transactions.
 
 ## Versionnement
 La version courante est indiquée dans `VERSION`. Chaque modification publiée doit
 mettre à jour cette version selon SemVer et être accompagnée d'un tag Git `v<version>`.
-La version initiale est `0.1.0`.
+La première version publiée était `0.1.0`.
 
 ## 1. Pré-requis
 - Python 3.10 ou plus récent
