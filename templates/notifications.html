@@ -1,8 +1,8 @@
 {% extends "base.html" %}{% block title %}Notifications · SocaBlock{% endblock %}
 {% block content %}
-<div class="page-head"><div><div class="eyebrow">CENTRE DE NOTIFICATIONS</div><h1>Notifications</h1><p class="muted">Les clés de partage reçues sont accessibles ici.</p></div></div>
+<div class="page-head"><div><div class="eyebrow">CENTRE DE NOTIFICATIONS</div><h1>Notifications</h1><p class="muted">Retrouvez ici les clés de partage et les événements de la blockchain.</p></div></div>
 <div class="notification-list">
-{% for item in items %}<article class="panel notification"><div class="notification-dot"></div><div class="notification-body"><b>{{ item.message }}</b><small>{{ item.created_at[:19].replace('T',' ') }}</small><div class="share-key"><code>{{ item.share_key }}</code><button type="button" class="copy-btn" data-copy="{{ item.share_key }}">Copier</button></div><a href="{{ url_for('history') }}">Rechercher cette transaction →</a></div></article>
+{% for item in items %}<article class="panel notification"><div class="notification-dot"></div><div class="notification-body"><b>{{ item.message }}</b><small>{{ item.created_at[:19].replace('T',' ') }}</small>{% if item.share_key %}<div class="share-key"><code>{{ item.share_key }}</code><button type="button" class="copy-btn" data-copy="{{ item.share_key }}">Copier</button></div><a href="{{ url_for('history') }}">Rechercher cette transaction →</a>{% endif %}</div></article>
 {% else %}<div class="panel empty">Vous n'avez aucune notification.</div>{% endfor %}
 </div>
 {% endblock %}

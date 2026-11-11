@@ -135,6 +135,19 @@ def create_block(difficulty=0, additional_transactions=None, empty_message=None)
         } for tx in pending_transactions]
         if additional_transactions:
             payload.extend(additional_transactions)
+        next_block_number = len(chain) + 1
+        reward_recipients = []
+        if next_block_number % 10 == 0:
+            reward_recipients = User.query.order_by(User.id.asc()).all()
+            if reward_recipients:
+                payload.append({
+                    "type": "REWARD",
+                    "amount_per_account": 1,
+                    "recipients": [
+                        {"account_id": user.id, "name": user.full_name}
+                        for user in reward_recipients
+                    ]
+                })
         if not payload:
             payload = [{
                 "type": "EMPTY",
@@ -145,6 +158,8 @@ def create_block(difficulty=0, additional_transactions=None, empty_message=None)
         block = Block(len(chain), utc_now(), payload, previous.hash, difficulty=difficulty)
         block.mine()
         store_block(block)
+        for user in reward_recipients:
+            user.balance += 1
         for tx in pending_transactions:
             tx.block_index = block.index
         db.session.commit()
@@ -197,8 +212,10 @@ def start_automatic_block_miner():
 def stop_automatic_block_miner():
     global automatic_mining_enabled
     with block_mining_state_lock:
+        was_enabled = automatic_mining_enabled
         automatic_mining_enabled = False
         block_mining_stop.set()
+        return was_enabled
 
 
 def get_block_generation_stats():
@@ -338,7 +355,14 @@ def blockchain_blocks():
 def control_automatic_miner():
     action = request.form.get("action")
     if action == "stop":
-        stop_automatic_block_miner()
+        was_enabled = stop_automatic_block_miner()
+        if was_enabled:
+            message = f"{current_user.full_name} a arrêté le minage automatique de la blockchain."
+            db.session.add_all(
+                Notification(user_id=user.id, message=message, share_key="")
+                for user in User.query.order_by(User.id.asc()).all()
+            )
+            db.session.commit()
         flash("La création automatique des blocs est arrêtée.", "success")
     elif action == "start":
         start_automatic_block_miner()

@@ -8,6 +8,8 @@ Application Flask + SQLite pour tester :
 - notifications contenant la clé de partage ;
 - explorateur de blocs avec index, timestamp, hash, previous hash, nonce et difficulté ;
 - génération automatique contrôlable depuis l'explorateur : un bloc vide toutes les 2 secondes ; chaque transfert crée immédiatement son propre bloc ;
+- à chaque dixième bloc ajouté, 1 SOCA est crédité à chaque compte inscrit et la récompense est inscrite dans le bloc ;
+- à l'arrêt du minage automatique, une notification indiquant le nom du compte qui l'a arrêté est envoyée à tous les comptes inscrits ;
 - nonce calculé par preuve de travail et affiché pour chaque bloc ;
 - tableau de bord avec le nombre de blocs et le temps écoulé depuis le premier bloc ;
 - profil avec affichage facultatif de sa propre clé privée, masquée par défaut ;

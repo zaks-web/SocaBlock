@@ -13,6 +13,9 @@
         {% for item in block.transactions %}
           {% if item.type == 'TRANSFER' %}
             <p><b>{{ item.amount }} SOCA</b> · {{ item.sender }} → {{ item.recipient }} · Transaction #{{ item.transaction_id }}</p>
+          {% elif item.type == 'REWARD' %}
+            <p><b>Récompense du bloc</b> · +{{ item.amount_per_account }} SOCA à chaque compte :
+              {{ item.recipients | map(attribute='name') | join(', ') }}</p>
           {% else %}<p>{{ item.message }}</p>{% endif %}
         {% endfor %}
         </div>
