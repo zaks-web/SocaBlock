@@ -1,0 +1,22 @@
+{% extends "base.html" %}{% block title %}Tableau de bord · SocaBlock{% endblock %}
+{% block content %}
+<div class="page-head"><div><div class="eyebrow">VOTRE ESPACE</div><h1>Bonjour {{ current_user.first_name }}.</h1><p class="muted">Voici l'activité récente de votre portefeuille.</p></div><a class="btn primary" href="{{ url_for('transactions') }}">＋ Nouvelle transaction</a></div>
+<div class="stats-grid dashboard-stats">
+  <div class="stat-card highlight"><span>Solde disponible</span><strong>{{ current_user.balance }} <small>SOCA</small></strong><em>Portefeuille</em></div>
+  <div class="stat-card"><span>Transactions envoyées</span><strong>{{ sent }}</strong><em>Depuis votre inscription</em></div>
+  <div class="stat-card"><span>Transactions reçues</span><strong>{{ received }}</strong><em>Depuis votre inscription</em></div>
+  <div class="stat-card"><span>Notifications</span><strong>{{ unread }}</strong><em>Non consultées</em></div>
+  <div class="stat-card"><span>Blocs formés</span><strong id="dashboardBlockCount">{{ block_count }}</strong><em>Dans la blockchain</em></div>
+  <div class="stat-card" id="dashboardBlockStats" data-refresh-url="{{ url_for('dashboard_block_stats') }}">
+    <span>Génération depuis</span>
+    <strong><span id="dashboardGenerationHours">{{ "%.2f"|format(generation_hours) }}</span> <small>heures</small></strong>
+    <em>Depuis le premier bloc</em>
+  </div>
+</div>
+<div class="section-heading"><div><div class="eyebrow">ACTIVITÉ</div><h2>Transactions récentes</h2></div><a href="{{ url_for('profile') }}">Tout afficher →</a></div>
+<div class="panel table-panel">
+{% if recent %}<div class="table-scroll"><table><thead><tr><th>Opération</th><th>Montant</th><th>Date</th><th>Bloc</th></tr></thead><tbody>
+{% for tx in recent %}<tr><td>{{ 'Envoyé à ' ~ tx.recipient.full_name if tx.sender_id == current_user.id else 'Reçu de ' ~ tx.sender.full_name }}</td><td class="{{ 'negative' if tx.sender_id == current_user.id else 'positive' }}">{{ '-' if tx.sender_id == current_user.id else '+' }}{{ tx.amount }} SOCA</td><td>{{ tx.created_at[:19].replace('T',' ') }}</td><td>#{{ tx.block_index }}</td></tr>{% endfor %}
+</tbody></table></div>{% else %}<div class="empty">Aucune transaction pour le moment. Votre première transaction apparaîtra ici.</div>{% endif %}
+</div>
+{% endblock %}

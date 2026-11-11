@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}SocaBlock — La blockchain en mouvement{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="eyebrow"><span class="pulse"></span> RÉSEAU SOCA · PROTOTYPE ACTIF</div>
+  <h1>Vos échanges.<br><span>Votre blockchain.</span></h1>
+  <p class="lead">Une plateforme expérimentale pour transférer des SOCA, suivre les transactions et explorer une chaîne de blocs transparente.</p>
+  <div class="hero-actions"><a class="btn primary" href="{{ url_for('register') }}">Commencer gratuitement</a><a class="btn ghost" href="{{ url_for('blockchain_page') }}">Explorer la blockchain</a></div>
+  <div class="hero-stats">
+    <div><strong>{{ blocks }}</strong><small>Blocs construits</small></div>
+    <div><strong>{{ tx_count }}</strong><small>Transactions</small></div>
+    <div><strong>200</strong><small>SOCA à l'inscription</small></div>
+  </div>
+</section>
+<section class="section-heading"><div><div class="eyebrow">ÉCOSYSTÈME</div><h2>Tout votre réseau, au même endroit.</h2></div></section>
+<div class="feature-grid">
+  <article class="panel"><div class="feature-icon">▦</div><h3>Explorer les blocs</h3><p>Consultez les index, horodatages, empreintes SHA-256 et liens entre les blocs.</p></article>
+  <article class="panel"><div class="feature-icon">⇄</div><h3>Transférer des SOCA</h3><p>Envoyez des unités à un autre membre et inscrivez chaque transfert dans la chaîne.</p></article>
+  <article class="panel"><div class="feature-icon">⌁</div><h3>Partager une preuve</h3><p>Partagez une clé de consultation pour retrouver les détails d'une transaction.</p></article>
+</div>
+{% endblock %}

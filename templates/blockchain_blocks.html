@@ -1,0 +1,22 @@
+{% for block in chain %}
+  <article class="block-row">
+    <span class="block-row-index">#{{ block.index }}</span>
+    <span class="block-row-time">{{ block.timestamp }}</span>
+    <span class="block-row-nonce">Nonce <b>{{ block.nonce }}</b></span>
+    <span class="block-row-difficulty">Difficulté <b>{{ block.difficulty }}</b></span>
+    <details class="block-row-details" data-block-index="{{ block.index }}">
+      <summary>Détails</summary>
+      <div class="block-details-content">
+        <div class="hash-field"><small>HASH DU BLOC</small><code>{{ block.hash }}</code></div>
+        <div class="hash-field"><small>HASH PRÉCÉDENT</small><code>{{ block.previous_hash }}</code></div>
+        <div class="block-data"><small>DONNÉES ENREGISTRÉES</small>
+        {% for item in block.transactions %}
+          {% if item.type == 'TRANSFER' %}
+            <p><b>{{ item.amount }} SOCA</b> · {{ item.sender }} → {{ item.recipient }} · Transaction #{{ item.transaction_id }}</p>
+          {% else %}<p>{{ item.message }}</p>{% endif %}
+        {% endfor %}
+        </div>
+      </div>
+    </details>
+  </article>
+{% else %}<div class="panel empty">Aucun bloc disponible.</div>{% endfor %}

@@ -1,0 +1,21 @@
+{% extends "base.html" %}{% block title %}Profil · SocaBlock{% endblock %}
+{% block content %}
+<div class="page-head"><div><div class="eyebrow">MON COMPTE</div><h1>Profil utilisateur</h1><p class="muted">Vos informations et votre activité sur SocaBlock.</p></div></div>
+<div class="two-col">
+  <section class="panel profile-card"><div class="avatar">{{ current_user.first_name[0] }}{{ current_user.last_name[0] }}</div><h2>{{ current_user.full_name }}</h2><p class="muted">{{ current_user.email }}</p><div class="profile-balance">{{ current_user.balance }} <small>SOCA</small></div><small class="muted">Membre depuis {{ current_user.created_at[:10] }}</small></section>
+  <section class="panel"><h2>Statistiques du compte</h2><div class="profile-stats"><div><b>{{ sent }}</b><span>Envoyées</span></div><div><b>{{ received }}</b><span>Reçues</span></div><div><b>{{ total }}</b><span>Total</span></div></div><div class="notice">Votre compte a été crédité de 200 SOCA à sa création. Le solde évolue selon les transferts.</div></section>
+</div>
+<section class="panel private-key-panel">
+  <h2>Clé privée du portefeuille</h2>
+  <p>Cette clé donne accès à votre portefeuille. Ne la partagez jamais et ne l’affichez pas sur un appareil public.</p>
+  <button
+    class="btn ghost"
+    id="togglePrivateKey"
+    type="button"
+    data-key-url="{{ url_for('profile_private_key') }}"
+    aria-expanded="false"
+  >Afficher ma clé privée</button>
+  <pre class="private-key" id="privateKey" hidden></pre>
+  <p class="private-key-error" id="privateKeyError" role="alert" hidden></p>
+</section>
+{% endblock %}

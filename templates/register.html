@@ -1,0 +1,12 @@
+{% extends "base.html" %}{% block title %}Créer un compte · SocaBlock{% endblock %}
+{% block content %}
+<div class="auth-wrap"><div class="auth-card">
+  <div class="eyebrow">REJOINDRE LE RÉSEAU</div><h1>Créer un compte</h1><p class="muted">Votre portefeuille démarre avec 200 SOCA.</p>
+  <form method="post" class="form">
+    <div class="two-fields"><label>Prénom<input name="first_name" required autocomplete="given-name"></label><label>Nom<input name="last_name" required autocomplete="family-name"></label></div>
+    <label>Adresse e-mail<input type="email" name="email" required autocomplete="email"></label>
+    <label>Mot de passe<input type="password" name="password" minlength="8" required autocomplete="new-password"></label>
+    <button class="btn primary full">Créer mon compte</button>
+  </form><p class="muted center">Déjà membre ? <a href="{{ url_for('login') }}">Se connecter</a></p>
+</div></div>
+{% endblock %}

@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}SocaBlock{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<aside class="admin-sidebar">
+  <a class="brand" href="{{ url_for('home') }}"><span class="brand-mark">S</span> SocaBlock</a>
+  <div class="sidebar-caption">NAVIGATION</div>
+  <nav class="sidebar-nav" aria-label="Navigation principale">
+    <a class="{{ 'active' if request.endpoint == 'blockchain_page' else '' }}" href="{{ url_for('blockchain_page') }}">Blockchain</a>
+    {% if current_user.is_authenticated %}
+      <a class="{{ 'active' if request.endpoint == 'dashboard' else '' }}" href="{{ url_for('dashboard') }}">Tableau de bord</a>
+      <a class="{{ 'active' if request.endpoint == 'transactions' else '' }}" href="{{ url_for('transactions') }}">Transactions</a>
+      <a class="{{ 'active' if request.endpoint == 'history' else '' }}" href="{{ url_for('history') }}">Historique</a>
+      <a class="{{ 'active' if request.endpoint == 'notifications' else '' }}" href="{{ url_for('notifications') }}">Notifications</a>
+      <a class="{{ 'active' if request.endpoint == 'profile' else '' }}" href="{{ url_for('profile') }}">Profil</a>
+    {% else %}
+      <a class="{{ 'active' if request.endpoint == 'login' else '' }}" href="{{ url_for('login') }}">Connexion</a>
+      <a class="{{ 'active' if request.endpoint == 'register' else '' }}" href="{{ url_for('register') }}">Créer un compte</a>
+    {% endif %}
+  </nav>
+  {% if current_user.is_authenticated %}
+    <div class="sidebar-account">
+      <div class="sidebar-user"><span class="sidebar-avatar">{{ current_user.first_name[0] }}{{ current_user.last_name[0] }}</span><span>{{ current_user.full_name }}</span></div>
+      <form class="logout-form" method="post" action="{{ url_for('logout') }}"><button class="nav-logout">Déconnexion</button></form>
+    </div>
+  {% endif %}
+</aside>
+<div class="app-content">
+  <main class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="flash {{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+  <footer>© 2026 SocaBlock · Prototype blockchain éducatif</footer>
+</div>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

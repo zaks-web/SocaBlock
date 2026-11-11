@@ -1,0 +1,19 @@
+{% extends "base.html" %}{% block title %}Transactions · SocaBlock{% endblock %}
+{% block content %}
+<div class="page-head"><div><div class="eyebrow">PORTEFEUILLE</div><h1>Envoyer des SOCA</h1><p class="muted">Le transfert met à jour les deux soldes et ajoute un bloc à la chaîne.</p></div><div class="balance-chip">{{ current_user.balance }} <small>SOCA disponibles</small></div></div>
+<div class="two-col">
+  <section class="panel form-panel"><h2>Nouveau transfert</h2>
+    {% if users %}
+    <form method="post" class="form">
+      <label>Rechercher / sélectionner le destinataire<input id="userSearch" placeholder="Filtrer les membres..." type="search"><select name="recipient_id" id="recipientSelect" required><option value="">Choisir un compte</option>{% for user in users %}<option value="{{ user.id }}">{{ user.first_name }} {{ user.last_name }} — {{ user.email }}</option>{% endfor %}</select></label>
+      <label>Montant à transférer<input type="number" name="amount" min="1" max="{{ current_user.balance }}" step="1" placeholder="Ex. 25" required></label>
+      <div class="notice">Une clé de partage unique sera créée pour cette transaction. Elle sera affichée après validation et envoyée au destinataire dans ses notifications.</div>
+      <button class="btn primary full">Confirmer le transfert</button>
+    </form>
+    {% else %}<div class="empty">Aucun autre utilisateur inscrit. Invitez un membre pour effectuer un transfert.</div>{% endif %}
+  </section>
+  <section class="panel"><h2>À savoir</h2><ul class="clean-list"><li>Chaque nouveau compte reçoit 200 SOCA.</li><li>Le solde est contrôlé avant le transfert.</li><li>Chaque transfert crée un bloc lié au précédent.</li><li>La clé de partage permet de consulter les détails de cette transaction.</li></ul></section>
+</div>
+<div class="section-heading"><div><div class="eyebrow">VOTRE ACTIVITÉ</div><h2>Derniers mouvements</h2></div></div>
+<div class="panel table-panel">{% if history %}<div class="table-scroll"><table><thead><tr><th>Expéditeur</th><th>Destinataire</th><th>SOCA</th><th>Date / heure</th><th>Bloc</th></tr></thead><tbody>{% for tx in history %}<tr><td>{{ tx.sender.full_name }}</td><td>{{ tx.recipient.full_name }}</td><td>{{ tx.amount }}</td><td>{{ tx.created_at[:19].replace('T',' ') }}</td><td>#{{ tx.block_index }}</td></tr>{% endfor %}</tbody></table></div>{% else %}<div class="empty">Aucun mouvement enregistré.</div>{% endif %}</div>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "base.html" %}{% block title %}Historique · SocaBlock{% endblock %}
+{% block content %}
+<div class="page-head"><div><div class="eyebrow">RECHERCHE SÉCURISÉE</div><h1>Retrouver une transaction</h1><p class="muted">Saisissez la clé de partage reçue de l'expéditeur.</p></div></div>
+<div class="panel search-panel"><form method="post" class="search-form"><input name="share_key" placeholder="Coller la clé de partage..." required><button class="btn primary">Rechercher</button></form>
+{% if searched %}
+  {% if found %}
+    <div class="result-card"><div class="eyebrow">TRANSACTION TROUVÉE · #{{ found.id }}</div><div class="result-amount">{{ found.amount }} <small>SOCA</small></div>
+      <div class="detail-grid"><div><small>EXPÉDITEUR</small><b>{{ found.sender.full_name }}</b></div><div><small>DESTINATAIRE</small><b>{{ found.recipient.full_name }}</b></div><div><small>DATE ET HEURE</small><b>{{ found.created_at[:19].replace('T',' ') }}</b></div><div><small>BLOC</small><b>#{{ found.block_index }}</b></div></div>
+      <div class="hash-field"><small>CLÉ PUBLIQUE DE L'EXPÉDITEUR</small><code>{{ found.sender_public_key }}</code></div>
+    </div>
+  {% else %}<div class="empty">Aucune transaction ne correspond à cette clé.</div>{% endif %}
+{% endif %}
+</div>
+<div class="section-heading"><div><div class="eyebrow">MES OPÉRATIONS</div><h2>Transactions envoyées et reçues</h2></div></div>
+<div class="panel table-panel">
+{% if transactions %}
+  <div class="table-scroll"><table><thead><tr><th>Type</th><th>Expéditeur</th><th>Destinataire</th><th>Montant</th><th>Date / heure</th><th>Bloc</th></tr></thead><tbody>
+  {% for tx in transactions %}
+    <tr>
+      <td class="{{ 'negative' if tx.sender_id == current_user.id else 'positive' }}">{{ 'Envoyée' if tx.sender_id == current_user.id else 'Reçue' }}</td>
+      <td>{{ tx.sender.full_name }}</td>
+      <td>{{ tx.recipient.full_name }}</td>
+      <td>{{ tx.amount }} SOCA</td>
+      <td>{{ tx.created_at[:19].replace('T',' ') }}</td>
+      <td>#{{ tx.block_index }}</td>
+    </tr>
+  {% endfor %}
+  </tbody></table></div>
+{% else %}<div class="empty">Aucune transaction envoyée ou reçue pour le moment.</div>{% endif %}
+</div>
+{% endblock %}

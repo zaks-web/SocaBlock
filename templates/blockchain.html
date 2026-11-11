@@ -1,0 +1,39 @@
+{% extends "base.html" %}{% block title %}Blockchain · SocaBlock{% endblock %}
+{% block content %}
+<div class="page-head"><div><div class="eyebrow">EXPLORATEUR</div><h1>La blockchain</h1><p class="muted">Chaque bloc conserve les données et l'empreinte du bloc précédent.</p></div><span class="status {{ 'ok' if valid else 'bad' }}">{{ '● Chaîne valide' if valid else '● Intégrité à vérifier' }}</span></div>
+<section class="panel block-generator">
+  <h2>Minage automatique</h2>
+  <p>Un bloc est ajouté toutes les 2 secondes, même sans transaction. Chaque bloc automatique est miné avec une difficulté de 1 et possède un nonce enregistré. Les transferts en attente sont inclus dans le prochain bloc.</p>
+  {% if current_user.is_authenticated %}
+    <p class="status {{ 'ok' if automatic_mining_enabled else 'bad' }}">
+      {{ '● Actif' if automatic_mining_enabled else '● Arrêté' }}
+    </p>
+    <form method="post" action="{{ url_for('control_automatic_miner') }}" class="block-generator-form">
+      {% if automatic_mining_enabled %}
+        <button class="btn" type="submit" name="action" value="stop">Arrêter la création automatique</button>
+      {% else %}
+        <button class="btn primary" type="submit" name="action" value="start">Reprendre la création automatique</button>
+      {% endif %}
+    </form>
+  {% else %}
+    <p><a href="{{ url_for('login') }}">Connectez-vous</a> pour contrôler le minage automatique.</p>
+  {% endif %}
+</section>
+<section class="panel block-generator">
+  <h2>Générer un bloc manuellement</h2>
+  <p>Le nonce est calculé jusqu'à obtenir un hash correspondant à la difficulté choisie (maximum {{ max_difficulty }} zéros).</p>
+  {% if current_user.is_authenticated %}
+    <form method="post" action="{{ url_for('generate_block') }}" class="block-generator-form">
+      <label for="block-difficulty">Difficulté (1 à {{ max_difficulty }})
+        <input id="block-difficulty" name="difficulty" type="number" min="1" max="{{ max_difficulty }}" value="2" required>
+      </label>
+      <button class="btn primary" type="submit">Générer le bloc</button>
+    </form>
+  {% else %}
+    <p><a href="{{ url_for('login') }}">Connectez-vous</a> pour générer un bloc.</p>
+  {% endif %}
+</section>
+<div class="chain-list" id="chainList" data-refresh-url="{{ url_for('blockchain_blocks') }}">
+  {% include "blockchain_blocks.html" %}
+</div>
+{% endblock %}
