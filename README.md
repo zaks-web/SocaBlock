@@ -22,6 +22,8 @@ Application Flask + SQLite pour tester :
 La version courante est indiquée dans `VERSION`. Chaque modification publiée doit
 mettre à jour cette version selon SemVer et être accompagnée d'un tag Git `v<version>`.
 La première version publiée était `0.1.0`.
+La base SQLite `socablock.db` est propre à chaque installation et n'est pas publiée
+sur GitHub ; une réinitialisation locale ne modifie donc pas les données des autres installations.
 
 ## 1. Pré-requis
 - Python 3.10 ou plus récent
